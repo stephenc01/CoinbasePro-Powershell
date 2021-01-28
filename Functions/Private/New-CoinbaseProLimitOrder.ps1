@@ -10,7 +10,7 @@ function New-CoinbaseProLimitOrder {
     [parameter(Mandatory=$true)][ValidateScript({ Test-Product $_ })]$ProductID,
     [parameter()]$OrderID,
     [parameter()][ValidateSet("dc","co","cn","cb")][string]$STP = "dc",
-    [parameter()][ValidateSet("GTC","GTT","IOC","FOK")][string]$TimeinForce = "GTT",
+    [parameter()][ValidateSet("GTC","GTT","IOC","FOK")][string]$TimeinForce = "GTC",
     [parameter()][ValidateSet("min","hour","day")][string]$CancelAfter,
     [parameter()][ValidateSet("true","false")]$PostOnly,
     [parameter()] [switch] $SandboxAPI
@@ -40,6 +40,8 @@ function New-CoinbaseProLimitOrder {
     $api.url = "/orders"
     $api.body = ($post | ConvertTo-Json)
 
+    Write-Debug -Message ($post | ConvertTo-Json)
+    <#
     Write-Debug -Message "$Side Limit order:
     Size: $Size
     Product: $ProductID
@@ -49,6 +51,7 @@ function New-CoinbaseProLimitOrder {
     Cancel After: $CancelAfter
     Post Only: $PostOnly
     OrderID: $OrderID"
+    #>
 
     $response = Invoke-CoinbaseProRequest $api
     Write-Output $response
